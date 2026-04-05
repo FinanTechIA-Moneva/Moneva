@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/moneva_bg"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Buscar"
+            android:textColor="@color/moneva_text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Texto na observação"
+            android:textColor="@color/moneva_text_primary" />
+
+        <EditText
+            android:id="@+id/edtBuscaTexto"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_login_input"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:textColor="@color/moneva_text_primary"
+            android:textColorHint="@color/moneva_text_secondary" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="Valor igual a (R$)"
+            android:textColor="@color/moneva_text_primary" />
+
+        <EditText
+            android:id="@+id/edtBuscaValor"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_login_input"
+            android:digits="0123456789"
+            android:inputType="number"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:textColor="@color/moneva_text_primary"
+            android:textColorHint="@color/moneva_text_secondary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnFecharDialogBusca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_dialog_cancelar"
+                android:text="Fechar"
+                android:textAllCaps="false"
+                android:textColor="@color/moneva_text_primary" />
+
+            <Button
+                android:id="@+id/btnAplicarDialogBusca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_login_button"
+                android:text="Buscar"
+                android:textAllCaps="false"
+                android:textColor="@color/moneva_button_text" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

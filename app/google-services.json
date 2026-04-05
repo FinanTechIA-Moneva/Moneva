@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "320992050973",
+    "project_id": "moneva-18fae",
+    "storage_bucket": "moneva-18fae.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320992050973:android:10cdfe4870370b9aa52bf4",
+        "android_client_info": {
+          "package_name": "com.example.moneva"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiNtUh2jj_pcLdMpdhXZbiDYQYqo-nKp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

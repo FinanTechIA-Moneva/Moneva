@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/moneva_bg"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Filtros"
+            android:textColor="@color/moneva_text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Tipo"
+            android:textColor="@color/moneva_text_primary" />
+
+        <Spinner
+            android:id="@+id/spinnerFiltroTipo"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_login_input" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="Meio"
+            android:textColor="@color/moneva_text_primary" />
+
+        <Spinner
+            android:id="@+id/spinnerFiltroMeio"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_login_input" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="Categoria"
+            android:textColor="@color/moneva_text_primary" />
+
+        <Spinner
+            android:id="@+id/spinnerFiltroCategoria"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_login_input" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnFecharDialogFiltro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_dialog_cancelar"
+                android:text="Fechar"
+                android:textAllCaps="false"
+                android:textColor="@color/moneva_text_primary" />
+
+            <Button
+                android:id="@+id/btnAplicarDialogFiltro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_login_button"
+                android:text="Aplicar"
+                android:textAllCaps="false"
+                android:textColor="@color/moneva_button_text" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

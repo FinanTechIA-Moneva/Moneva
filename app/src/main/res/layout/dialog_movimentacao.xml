@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/moneva_bg"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/txtTituloDialogMovimentacao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nova movimentação"
+            android:textColor="@color/moneva_text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Tipo"
+            android:textColor="@color/moneva_text_primary"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinnerTipoMovimentacao"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_login_input" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Categoria"
+            android:textColor="@color/moneva_text_primary"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinnerCategoriaMovimentacao"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_login_input" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Meio"
+            android:textColor="@color/moneva_text_primary"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinnerMeioMovimentacao"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_login_input" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Data"
+            android:textColor="@color/moneva_text_primary"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edtDataMovimentacao"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_login_input"
+            android:hint="Ex.: 23/11"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:textColor="@color/moneva_text_primary"
+            android:textColorHint="@color/moneva_text_secondary" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Valor"
+            android:textColor="@color/moneva_text_primary"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edtValorMovimentacao"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_login_input"
+            android:digits="0123456789"
+            android:hint="Digite o valor"
+            android:inputType="number"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:textColor="@color/moneva_text_primary"
+            android:textColorHint="@color/moneva_text_secondary" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Observação"
+            android:textColor="@color/moneva_text_primary"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edtObsMovimentacao"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_login_input"
+            android:hint="Ex.: aluguel, salário, gasolina..."
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:textColor="@color/moneva_text_primary"
+            android:textColorHint="@color/moneva_text_secondary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnCancelarDialogMovimentacao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_dialog_cancelar"
+                android:text="Cancelar"
+                android:textAllCaps="false"
+                android:textColor="@color/moneva_text_primary" />
+
+            <Button
+                android:id="@+id/btnSalvarDialogMovimentacao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/bg_login_button"
+                android:text="Salvar"
+                android:textAllCaps="false"
+                android:textColor="@color/moneva_button_text" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

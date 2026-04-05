@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/moneva_bg"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtTituloQuestionario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Questionário Inicial"
+                    android:textColor="@color/moneva_green"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtSubtituloQuestionario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Queremos te conhecer melhor para personalizar sua experiência no Moneva."
+                    android:textColor="@color/moneva_text_secondary"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btnFecharQuestionario"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:background="@drawable/bg_profile_close"
+                android:gravity="center"
+                android:text="✕"
+                android:textColor="@color/moneva_green"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- INFORMAÇÕES PESSOAIS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_home_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Informações Pessoais"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Nome"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtNomeQuestionario"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_login_input"
+                android:hint="Digite seu nome completo"
+                android:inputType="textPersonName"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textColor="@color/moneva_text_primary"
+                android:textColorHint="@color/moneva_text_secondary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Gênero"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinnerGeneroQuestionario"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_login_input"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Renda mensal"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtRendaMensalQuestionario"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_login_input"
+                android:digits="0123456789"
+                android:hint="Digite sua renda mensal"
+                android:inputType="number"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textColor="@color/moneva_text_primary"
+                android:textColorHint="@color/moneva_text_secondary" />
+        </LinearLayout>
+
+        <!-- OBJETIVOS E SONHOS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_home_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Objetivos e Sonhos"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Quais são seus objetivos financeiros?"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinnerObjetivoFinanceiroQuestionario"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_login_input"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp" />
+
+            <LinearLayout
+                android:id="@+id/layoutOutroObjetivoFinanceiro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/edtOutroObjetivoFinanceiroQuestionario"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_login_input"
+                    android:hint="Digite outro objetivo financeiro"
+                    android:inputType="text"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/moneva_text_primary"
+                    android:textColorHint="@color/moneva_text_secondary" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Quais são seus sonhos?"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinnerSonhosQuestionario"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_login_input"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp" />
+
+            <LinearLayout
+                android:id="@+id/layoutOutroSonho"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/edtOutroSonhoQuestionario"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_login_input"
+                    android:hint="Digite outro sonho"
+                    android:inputType="text"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/moneva_text_primary"
+                    android:textColorHint="@color/moneva_text_secondary" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- SITUAÇÃO ATUAL -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_home_card"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Situação Atual"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Como você define sua situação financeira atual?"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinnerStatusFinanceiroQuestionario"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_login_input"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp" />
+
+            <LinearLayout
+                android:id="@+id/layoutOutroStatusFinanceiro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/edtOutroStatusFinanceiroQuestionario"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_login_input"
+                    android:hint="Digite outra situação financeira"
+                    android:inputType="text"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/moneva_text_primary"
+                    android:textColorHint="@color/moneva_text_secondary" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Como você se vê financeiramente daqui 5 anos?"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtVisao5AnosQuestionario"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_login_input"
+                android:gravity="top|start"
+                android:hint="Descreva como você se vê financeiramente daqui 5 anos"
+                android:inputType="textMultiLine"
+                android:padding="16dp"
+                android:textColor="@color/moneva_text_primary"
+                android:textColorHint="@color/moneva_text_secondary" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnSalvarQuestionario"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/bg_questionario_botao"
+            android:text="Salvar questionário"
+            android:textAllCaps="false"
+            android:textColor="@color/moneva_button_text"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</ScrollView>

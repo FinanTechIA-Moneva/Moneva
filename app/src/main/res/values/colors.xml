@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="moneva_bg">#05080D</color>
+    <color name="moneva_card">#111820</color>
+    <color name="moneva_card_border">#1E2A36</color>
+    <color name="moneva_green">#00FF9C</color>
+    <color name="moneva_green_dark">#00C97B</color>
+    <color name="moneva_text_primary">#FFFFFF</color>
+    <color name="moneva_text_secondary">#B8C4D0</color>
+    <color name="moneva_warning">#FFC107</color>
+    <color name="moneva_progress_bg">#26313C</color>
+    <color name="moneva_topbar">#2A2F38</color>
+    <color name="moneva_input_bg">#1F2630</color>
+    <color name="moneva_input_border">#2E3946</color>
+    <color name="moneva_button_text">#E8FFF5</color>
+    <color name="moneva_link">#4DA3FF</color>
+    <color name="moneva_danger">#FF7B7B</color>
+</resources>

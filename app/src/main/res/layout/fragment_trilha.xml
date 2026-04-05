@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/moneva_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- TOPO -->
+        <LinearLayout
+            android:id="@+id/topbarTrilha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_trilha_topbar"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="14dp">
+
+            <TextView
+                android:id="@+id/txtTituloTrilha"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="📖 Moneva"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtMoedasTrilha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="18dp"
+                android:text="🪙 27"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtSequenciaTrilha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔥 3 dias"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- ÁREA DA TRILHA -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="14dp"
+            android:overScrollMode="never">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="30dp">
+
+                <!-- NÓ 1 -->
+                <LinearLayout
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/bg_trilha_node_bonus"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="✔"
+                        android:textColor="@color/moneva_text_primary"
+                        android:textSize="44sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="14dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/bg_trilha_path_segment" />
+
+                <!-- NÓ 2 BLOQUEADO -->
+                <LinearLayout
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/bg_trilha_node_locked"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔒"
+                        android:textSize="34sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="14dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/bg_trilha_path_segment" />
+
+                <!-- NÓ BÔNUS -->
+                <LinearLayout
+                    android:id="@+id/nodeBonusTrilha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:background="@drawable/bg_trilha_node_bonus"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🐷"
+                            android:textSize="48sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txtBadgeBonus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-8dp"
+                        android:background="@drawable/bg_trilha_badge"
+                        android:paddingLeft="18dp"
+                        android:paddingTop="8dp"
+                        android:paddingRight="18dp"
+                        android:paddingBottom="8dp"
+                        android:text="Bônus"
+                        android:textColor="@color/moneva_text_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:background="@drawable/bg_trilha_star" />
+
+                        <View
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:layout_marginStart="8dp"
+                            android:background="@drawable/bg_trilha_star" />
+
+                        <View
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:layout_marginStart="8dp"
+                            android:background="@drawable/bg_trilha_star" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="14dp"
+                    android:layout_height="90dp"
+                    android:background="@drawable/bg_trilha_path_segment" />
+
+                <!-- NÓ 4 BLOQUEADO -->
+                <LinearLayout
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/bg_trilha_node_locked"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔒"
+                        android:textSize="34sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="14dp"
+                    android:layout_height="90dp"
+                    android:background="@drawable/bg_trilha_path_segment" />
+
+                <!-- NÓ 5 BLOQUEADO -->
+                <LinearLayout
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/bg_trilha_node_locked"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔒"
+                        android:textSize="34sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="14dp"
+                    android:layout_height="90dp"
+                    android:background="@drawable/bg_trilha_path_segment" />
+
+                <!-- NÓ 6 BLOQUEADO -->
+                <LinearLayout
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/bg_trilha_node_locked"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔒"
+                        android:textSize="34sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- BARRA INFERIOR -->
+
+        <LinearLayout
+            android:id="@+id/bottomBarTrilha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_trilha_bottombar"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="🏠"
+                android:textSize="28sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="📊"
+                android:textSize="28sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="✅"
+                android:textSize="28sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="🐷"
+                android:textSize="28sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="⚙"
+                android:textSize="28sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>
