@@ -3,6 +3,7 @@
     <solid android:color="#0F2A1A" />
     <corners android:radius="18dp" />
     <stroke
+        android:textColor="@color/moneva_green"
         android:width="1dp"
         android:color="@color/moneva_green_dark" />
 </shape>

@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/moneva_bg">
 
+    <!-- CONTEÚDO PRINCIPAL -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -56,6 +57,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_marginTop="14dp"
+            android:layout_marginBottom="80dp"
             android:overScrollMode="never">
 
             <LinearLayout
@@ -66,7 +68,7 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="30dp">
 
-                <!-- NÓ 1 -->
+                <!-- NÓ 1 - CONCLUÍDO -->
                 <LinearLayout
                     android:layout_width="110dp"
                     android:layout_height="110dp"
@@ -88,7 +90,7 @@
                     android:layout_height="80dp"
                     android:background="@drawable/bg_trilha_path_segment" />
 
-                <!-- NÓ 2 BLOQUEADO -->
+                <!-- NÓ 2 - BLOQUEADO -->
                 <LinearLayout
                     android:layout_width="110dp"
                     android:layout_height="110dp"
@@ -136,9 +138,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="-8dp"
                         android:background="@drawable/bg_trilha_badge"
-                        android:paddingLeft="18dp"
+                        android:paddingStart="18dp"
                         android:paddingTop="8dp"
-                        android:paddingRight="18dp"
+                        android:paddingEnd="18dp"
                         android:paddingBottom="8dp"
                         android:text="Bônus"
                         android:textColor="@color/moneva_text_primary"
@@ -170,52 +172,12 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <!-- MAIS NÓS BLOQUEADOS -->
                 <View
                     android:layout_width="14dp"
                     android:layout_height="90dp"
                     android:background="@drawable/bg_trilha_path_segment" />
 
-                <!-- NÓ 4 BLOQUEADO -->
-                <LinearLayout
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    android:background="@drawable/bg_trilha_node_locked"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔒"
-                        android:textSize="34sp" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="14dp"
-                    android:layout_height="90dp"
-                    android:background="@drawable/bg_trilha_path_segment" />
-
-                <!-- NÓ 5 BLOQUEADO -->
-                <LinearLayout
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    android:background="@drawable/bg_trilha_node_locked"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔒"
-                        android:textSize="34sp" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="14dp"
-                    android:layout_height="90dp"
-                    android:background="@drawable/bg_trilha_path_segment" />
-
-                <!-- NÓ 6 BLOQUEADO -->
                 <LinearLayout
                     android:layout_width="110dp"
                     android:layout_height="110dp"
@@ -232,58 +194,131 @@
 
             </LinearLayout>
         </ScrollView>
+    </LinearLayout>
 
-        <!-- BARRA INFERIOR -->
+    <!-- BARRA INFERIOR FIXA -->
+    <LinearLayout
+        android:id="@+id/btnPerfilHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_bottom_nav_bar"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="10dp"
+        android:elevation="8dp">
 
         <LinearLayout
-            android:id="@+id/bottomBarTrilha"
-            android:layout_width="match_parent"
+            android:id="@+id/navHome"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_trilha_bottombar"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
                 android:text="🏠"
-                android:textSize="28sp" />
+                android:textSize="22sp" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
+                android:layout_marginTop="4dp"
+                android:text="Home"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navGestor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="📊"
-                android:textSize="28sp" />
+                android:textSize="22sp" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="✅"
-                android:textSize="28sp" />
+                android:layout_marginTop="4dp"
+                android:text="Gestor"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navTrilha"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_bottom_nav_item_active"
+
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="🐷"
-                android:textSize="28sp" />
+                android:text="🧠"
+                android:textSize="22sp" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="⚙"
-                android:textSize="28sp" />
+                android:layout_marginTop="4dp"
+                android:text="Trilha"
+                android:textColor="@color/moneva_green"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="☰"
+                android:textSize="22sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Menu"
+                android:textColor="@color/moneva_text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>

@@ -1,12 +1,10 @@
 package com.example.moneva.ui.transacoes;
 
 import android.app.AlertDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,9 +14,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.moneva.MainActivity; // Importante para a navegação
 import com.example.moneva.R;
 
 import java.text.NumberFormat;
@@ -30,51 +31,31 @@ import java.util.Locale;
 
 public class TransacoesFragment extends Fragment {
 
-    private TextView txtMesAtualTransacoes;
-    private TextView txtEntradasValor;
-    private TextView txtSaidasValor;
-    private TextView txtSaldoValor;
+    // Views do Cabeçalho e Resumo
+    private TextView txtMesAtualTransacoes, txtEntradasValor, txtSaidasValor, txtSaldoValor;
+    private TextView btnMesAnterior, btnMesProximo, btnFiltro, btnBusca, btnLixeira;
 
-    private TextView btnMesAnterior;
-    private TextView btnMesProximo;
-    private TextView btnFiltro;
-    private TextView btnBusca;
-    private TextView btnLixeira;
-
-    private TextView btnNovaDespesaFixo;
-    private TextView btnNovaReceitaFixo;
-    private TextView btnNovaDespesaFlutuante;
-    private TextView btnNovaReceitaFlutuante;
-
-    private LinearLayout containerCategorias;
-    private LinearLayout layoutAcoesFixas;
-    private LinearLayout layoutAcoesFlutuantes;
-    private LinearLayout layoutBuscaAtiva;
-    private TextView txtBuscaAtiva;
-    private TextView btnLimparBusca;
-
+    // Views de Ação (Botões flutuantes e fixos)
+    private TextView btnNovaDespesaFixo, btnNovaReceitaFixo, btnNovaDespesaFlutuante, btnNovaReceitaFlutuante;
+    private LinearLayout containerCategorias, layoutAcoesFixas, layoutAcoesFlutuantes, layoutBuscaAtiva;
+    private TextView txtBuscaAtiva, btnLimparBusca;
     private ScrollView scrollGestor;
 
-    private final Calendar calendarioAtual = Calendar.getInstance();
+    // Navegação (Barra inferior, se existir no XML deste fragmento)
+    private View navHome, navGestor, navTrilha, navMenu;
 
+    private final Calendar calendarioAtual = Calendar.getInstance();
     private final List<RegistroFinanceiro> registros = new ArrayList<>();
     private final List<RegistroFinanceiro> registrosLixeira = new ArrayList<>();
     private final List<RegistroFinanceiro> registrosFiltrados = new ArrayList<>();
 
-    private String filtroTipoAtivo = "Todos";
-    private String filtroMeioAtivo = "Todos";
-    private String filtroCategoriaAtiva = "Todas";
-    private String buscaTextoAtiva = "";
-    private String buscaValorAtivo = "";
+    private String filtroTipoAtivo = "Todos", filtroMeioAtivo = "Todos", filtroCategoriaAtiva = "Todas";
+    private String buscaTextoAtiva = "", buscaValorAtivo = "";
 
-    public TransacoesFragment() {
-        // Construtor vazio obrigatório
-    }
+    public TransacoesFragment() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_transacoes, container, false);
 
         inicializarViews(view);
@@ -92,62 +73,73 @@ public class TransacoesFragment extends Fragment {
         txtEntradasValor = view.findViewById(R.id.txtEntradasValor);
         txtSaidasValor = view.findViewById(R.id.txtSaidasValor);
         txtSaldoValor = view.findViewById(R.id.txtSaldoValor);
-
         btnMesAnterior = view.findViewById(R.id.btnMesAnterior);
         btnMesProximo = view.findViewById(R.id.btnMesProximo);
         btnFiltro = view.findViewById(R.id.btnFiltro);
         btnBusca = view.findViewById(R.id.btnBusca);
         btnLixeira = view.findViewById(R.id.btnLixeira);
-
         btnNovaDespesaFixo = view.findViewById(R.id.btnNovaDespesaFixo);
         btnNovaReceitaFixo = view.findViewById(R.id.btnNovaReceitaFixo);
         btnNovaDespesaFlutuante = view.findViewById(R.id.btnNovaDespesaFlutuante);
         btnNovaReceitaFlutuante = view.findViewById(R.id.btnNovaReceitaFlutuante);
-
         containerCategorias = view.findViewById(R.id.containerCategorias);
         layoutAcoesFixas = view.findViewById(R.id.layoutAcoesFixas);
         layoutAcoesFlutuantes = view.findViewById(R.id.layoutAcoesFlutuantes);
-
         layoutBuscaAtiva = view.findViewById(R.id.layoutBuscaAtiva);
         txtBuscaAtiva = view.findViewById(R.id.txtBuscaAtiva);
         btnLimparBusca = view.findViewById(R.id.btnLimparBusca);
-
         scrollGestor = view.findViewById(R.id.scrollGestor);
+
+        // Views de navegação (IDs devem existir no XML para não dar erro)
+        navHome = view.findViewById(R.id.navHome);
+        navGestor = view.findViewById(R.id.navGestor);
+        navTrilha = view.findViewById(R.id.navTrilha);
+        navMenu = view.findViewById(R.id.navMenu);
     }
 
     private void configurarEventos() {
-        btnMesAnterior.setOnClickListener(v -> {
-            calendarioAtual.add(Calendar.MONTH, -1);
-            atualizarCabecalhoMes();
-        });
+        // Navegação (Check de segurança para evitar NullPointerException)
+        if (navHome != null) navHome.setOnClickListener(v -> navegarPara(new com.example.moneva.ui.home.HomeFragment()));
+        if (navGestor != null) navGestor.setOnClickListener(v -> Toast.makeText(getContext(), "Você já está no Gestor", Toast.LENGTH_SHORT).show());
+        if (navTrilha != null) navTrilha.setOnClickListener(v -> navegarPara(new com.example.moneva.ui.trilha.TrilhaFragment()));
+        if (navMenu != null) navMenu.setOnClickListener(v -> navegarPara(new com.example.moneva.ui.menu.MenuFragment()));
 
-        btnMesProximo.setOnClickListener(v -> {
-            calendarioAtual.add(Calendar.MONTH, 1);
-            atualizarCabecalhoMes();
-        });
+        // Eventos do Mês
+        if (btnMesAnterior != null) btnMesAnterior.setOnClickListener(v -> { calendarioAtual.add(Calendar.MONTH, -1); atualizarCabecalhoMes(); });
+        if (btnMesProximo != null) btnMesProximo.setOnClickListener(v -> { calendarioAtual.add(Calendar.MONTH, 1); atualizarCabecalhoMes(); });
 
-        btnNovaDespesaFixo.setOnClickListener(v -> abrirDialogMovimentacao(null, "despesa"));
-        btnNovaReceitaFixo.setOnClickListener(v -> abrirDialogMovimentacao(null, "receita"));
-        btnNovaDespesaFlutuante.setOnClickListener(v -> abrirDialogMovimentacao(null, "despesa"));
-        btnNovaReceitaFlutuante.setOnClickListener(v -> abrirDialogMovimentacao(null, "receita"));
+        // Movimentações
+        if (btnNovaDespesaFixo != null) btnNovaDespesaFixo.setOnClickListener(v -> abrirDialogMovimentacao(null, "despesa"));
+        if (btnNovaReceitaFixo != null) btnNovaReceitaFixo.setOnClickListener(v -> abrirDialogMovimentacao(null, "receita"));
+        if (btnNovaDespesaFlutuante != null) btnNovaDespesaFlutuante.setOnClickListener(v -> abrirDialogMovimentacao(null, "despesa"));
+        if (btnNovaReceitaFlutuante != null) btnNovaReceitaFlutuante.setOnClickListener(v -> abrirDialogMovimentacao(null, "receita"));
 
-        btnFiltro.setOnClickListener(v -> abrirDialogFiltro());
-        btnBusca.setOnClickListener(v -> abrirDialogBusca());
-        btnLixeira.setOnClickListener(v -> abrirDialogLixeira());
+        // Filtros e Busca
+        if (btnFiltro != null) btnFiltro.setOnClickListener(v -> abrirDialogFiltro());
+        if (btnBusca != null) btnBusca.setOnClickListener(v -> abrirDialogBusca());
+        if (btnLixeira != null) btnLixeira.setOnClickListener(v -> abrirDialogLixeira());
+        if (btnLimparBusca != null) btnLimparBusca.setOnClickListener(v -> limparBuscaEFiltro());
+    }
 
-        btnLimparBusca.setOnClickListener(v -> limparBuscaEFiltro());
+    // MÉTODO DE NAVEGAÇÃO CENTRALIZADO
+    private void navegarPara(Fragment fragment) {
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).substituirFragment(fragment, true);
+        }
     }
 
     private void configurarScrollAcoesFlutuantes() {
+        if (scrollGestor == null) return;
         scrollGestor.getViewTreeObserver().addOnScrollChangedListener(() -> {
             int scrollY = scrollGestor.getScrollY();
-
-            if (scrollY > 420) {
-                layoutAcoesFlutuantes.setVisibility(View.VISIBLE);
-                layoutAcoesFixas.setVisibility(View.INVISIBLE);
-            } else {
-                layoutAcoesFlutuantes.setVisibility(View.GONE);
-                layoutAcoesFixas.setVisibility(View.VISIBLE);
+            if (layoutAcoesFlutuantes != null && layoutAcoesFixas != null) {
+                if (scrollY > 420) {
+                    layoutAcoesFlutuantes.setVisibility(View.VISIBLE);
+                    layoutAcoesFixas.setVisibility(View.INVISIBLE);
+                } else {
+                    layoutAcoesFlutuantes.setVisibility(View.GONE);
+                    layoutAcoesFixas.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -155,17 +147,12 @@ public class TransacoesFragment extends Fragment {
     private void atualizarCabecalhoMes() {
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", new Locale("pt", "BR"));
         String mes = sdf.format(calendarioAtual.getTime());
-
-        if (!mes.isEmpty()) {
-            mes = mes.substring(0, 1).toUpperCase() + mes.substring(1);
-        }
-
-        txtMesAtualTransacoes.setText(mes);
+        if (!mes.isEmpty()) mes = mes.substring(0, 1).toUpperCase() + mes.substring(1);
+        if (txtMesAtualTransacoes != null) txtMesAtualTransacoes.setText(mes);
     }
 
     private void carregarDadosMock() {
         registros.clear();
-
         registros.add(new RegistroFinanceiro("receita", "Salário", "Dinheiro", "17/03", "pagamento mensal", 3500, "💰"));
         registros.add(new RegistroFinanceiro("despesa", "Moradia", "Débito", "20/03", "internet e água", 350, "🏠"));
         registros.add(new RegistroFinanceiro("despesa", "Transporte", "Boleto", "17/03", "combustível", 350, "🚗"));
@@ -173,50 +160,38 @@ public class TransacoesFragment extends Fragment {
         registros.add(new RegistroFinanceiro("despesa", "Moradia", "Dinheiro", "17/03", "aluguel", 900, "🏠"));
     }
 
+
     private void aplicarFiltrosEBusca() {
         registrosFiltrados.clear();
-
         for (RegistroFinanceiro registro : registros) {
             boolean passouTipo = filtroTipoAtivo.equals("Todos") || registro.tipo.equalsIgnoreCase(filtroTipoAtivo);
             boolean passouMeio = filtroMeioAtivo.equals("Todos") || registro.meio.equalsIgnoreCase(filtroMeioAtivo);
             boolean passouCategoria = filtroCategoriaAtiva.equals("Todas") || registro.categoria.equalsIgnoreCase(filtroCategoriaAtiva);
-
-            boolean passouBuscaTexto = buscaTextoAtiva.isEmpty()
-                    || registro.observacao.toLowerCase().contains(buscaTextoAtiva.toLowerCase());
-
-            boolean passouBuscaValor = buscaValorAtivo.isEmpty()
-                    || String.valueOf((int) registro.valor).equals(buscaValorAtivo);
+            boolean passouBuscaTexto = buscaTextoAtiva.isEmpty() || registro.observacao.toLowerCase().contains(buscaTextoAtiva.toLowerCase());
+            boolean passouBuscaValor = buscaValorAtivo.isEmpty() || String.valueOf((int) registro.valor).equals(buscaValorAtivo);
 
             if (passouTipo && passouMeio && passouCategoria && passouBuscaTexto && passouBuscaValor) {
                 registrosFiltrados.add(registro);
             }
         }
-
         atualizarResumoFinanceiro();
         renderizarLista();
         atualizarChipBusca();
     }
 
     private void atualizarResumoFinanceiro() {
-        double totalEntradas = 0;
-        double totalSaidas = 0;
-
-        for (RegistroFinanceiro registro : registrosFiltrados) {
-            if ("receita".equals(registro.tipo)) {
-                totalEntradas += registro.valor;
-            } else {
-                totalSaidas += registro.valor;
-            }
+        double totalEntradas = 0, totalSaidas = 0;
+        for (RegistroFinanceiro r : registrosFiltrados) {
+            if ("receita".equals(r.tipo)) totalEntradas += r.valor;
+            else totalSaidas += r.valor;
         }
-
-        double saldo = totalEntradas - totalSaidas;
-
-        txtEntradasValor.setText(formatarMoeda(totalEntradas));
-        txtSaidasValor.setText(formatarMoeda(totalSaidas));
-        txtSaldoValor.setText(formatarMoeda(saldo));
+        if (txtEntradasValor != null) txtEntradasValor.setText(formatarMoeda(totalEntradas));
+        if (txtSaidasValor != null) txtSaidasValor.setText(formatarMoeda(totalSaidas));
+        if (txtSaldoValor != null) txtSaldoValor.setText(formatarMoeda(totalEntradas - totalSaidas));
     }
 
     private void renderizarLista() {
+        if (containerCategorias == null) return;
         containerCategorias.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(requireContext());
 
@@ -236,12 +211,7 @@ public class TransacoesFragment extends Fragment {
             txtTitulo.setText(registro.categoria);
             txtTipo.setText(capitalizar(registro.tipo));
             txtDescricao.setText("• " + registro.meio + " • " + registro.data + " • " + registro.observacao);
-
-            if (registro.editado) {
-                viewEditadoDot.setVisibility(View.VISIBLE);
-            } else {
-                viewEditadoDot.setVisibility(View.GONE);
-            }
+            viewEditadoDot.setVisibility(registro.editado ? View.VISIBLE : View.GONE);
 
             if ("receita".equals(registro.tipo)) {
                 txtValor.setText("+ " + formatarMoeda(registro.valor));
@@ -493,23 +463,6 @@ public class TransacoesFragment extends Fragment {
                 .show();
     }
 
-    private void atualizarChipBusca() {
-        List<String> partes = new ArrayList<>();
-
-        if (!filtroTipoAtivo.equals("Todos")) partes.add("Tipo: " + filtroTipoAtivo);
-        if (!filtroMeioAtivo.equals("Todos")) partes.add("Meio: " + filtroMeioAtivo);
-        if (!filtroCategoriaAtiva.equals("Todas")) partes.add("Categoria: " + filtroCategoriaAtiva);
-        if (!buscaTextoAtiva.isEmpty()) partes.add("Texto: " + buscaTextoAtiva);
-        if (!buscaValorAtivo.isEmpty()) partes.add("Valor: " + buscaValorAtivo);
-
-        if (partes.isEmpty()) {
-            layoutBuscaAtiva.setVisibility(View.GONE);
-        } else {
-            layoutBuscaAtiva.setVisibility(View.VISIBLE);
-            txtBuscaAtiva.setText(unirPartes(partes));
-        }
-    }
-
     private String unirPartes(List<String> partes) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < partes.size(); i++) {
@@ -522,14 +475,25 @@ public class TransacoesFragment extends Fragment {
     }
 
     private void limparBuscaEFiltro() {
-        filtroTipoAtivo = "Todos";
-        filtroMeioAtivo = "Todos";
-        filtroCategoriaAtiva = "Todas";
-        buscaTextoAtiva = "";
-        buscaValorAtivo = "";
-
+        filtroTipoAtivo = "Todos"; filtroMeioAtivo = "Todos"; filtroCategoriaAtiva = "Todas";
+        buscaTextoAtiva = ""; buscaValorAtivo = "";
         aplicarFiltrosEBusca();
-        Toast.makeText(requireContext(), "Busca e filtros limpos.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), "Filtros limpos", Toast.LENGTH_SHORT).show();
+    }
+
+    private void atualizarChipBusca() {
+        if (layoutBuscaAtiva == null) return;
+        List<String> partes = new ArrayList<>();
+        if (!filtroTipoAtivo.equals("Todos")) partes.add(filtroTipoAtivo);
+        if (!filtroMeioAtivo.equals("Todos")) partes.add(filtroMeioAtivo);
+        if (!buscaTextoAtiva.isEmpty()) partes.add(buscaTextoAtiva);
+
+        if (partes.isEmpty()) {
+            layoutBuscaAtiva.setVisibility(View.GONE);
+        } else {
+            layoutBuscaAtiva.setVisibility(View.VISIBLE);
+            txtBuscaAtiva.setText(String.join(" • ", partes));
+        }
     }
 
     private void selecionarSpinner(Spinner spinner, String valor) {
@@ -573,29 +537,18 @@ public class TransacoesFragment extends Fragment {
     }
 
     private String formatarMoeda(double valor) {
-        NumberFormat formato = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
-        return formato.format(valor);
+        return NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(valor);
     }
 
     private static class RegistroFinanceiro {
-        String tipo;
-        String categoria;
-        String meio;
-        String data;
-        String observacao;
+        String tipo, categoria, meio, data, observacao, icone;
         double valor;
-        String icone;
         boolean editado;
 
         RegistroFinanceiro(String tipo, String categoria, String meio, String data, String observacao, double valor, String icone) {
-            this.tipo = tipo;
-            this.categoria = categoria;
-            this.meio = meio;
-            this.data = data;
-            this.observacao = observacao;
-            this.valor = valor;
-            this.icone = icone;
-            this.editado = false;
+            this.tipo = tipo; this.categoria = categoria; this.meio = meio;
+            this.data = data; this.observacao = observacao; this.valor = valor;
+            this.icone = icone; this.editado = false;
         }
     }
 }
