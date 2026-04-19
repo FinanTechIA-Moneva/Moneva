@@ -19,6 +19,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") } // Adicionado 19-04-2026 - Gráfico do gestor
     }
 }
 

@@ -40,6 +40,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0") // Adicionado 19-04-2026 - Gráfico do gestor
 
     implementation(libs.appcompat)
     implementation(libs.material)
