@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,6 +36,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -228,7 +230,7 @@ public class TransacoesFragment extends Fragment {
         pieChartGestor.setDrawEntryLabels(false);
         pieChartGestor.setRotationEnabled(false);
         pieChartGestor.setHighlightPerTapEnabled(false);
-        pieChartGestor.setHoleColor(ContextCompat.getColor(requireContext(), R.color.moneva_bg));
+        pieChartGestor.setHoleColor(ContextCompat.getColor(requireContext(), R.color.moneva_input_bg));
 
         Description description = new Description();
         description.setText("");
@@ -458,30 +460,47 @@ public class TransacoesFragment extends Fragment {
         View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_movimentacao, null);
 
         TextView txtTitulo = dialogView.findViewById(R.id.txtTituloDialogMovimentacao);
-        Spinner spinnerTipo = dialogView.findViewById(R.id.spinnerTipoMovimentacao);
         Spinner spinnerCategoria = dialogView.findViewById(R.id.spinnerCategoriaMovimentacao);
         Spinner spinnerMeio = dialogView.findViewById(R.id.spinnerMeioMovimentacao);
+        LinearLayout layoutMeioPagamento = dialogView.findViewById(R.id.layoutMeioPagamento);
+        LinearLayout layoutCartaoCredito = dialogView.findViewById(R.id.layoutCartaoCredito);
+
         EditText edtData = dialogView.findViewById(R.id.edtDataMovimentacao);
+        EditText edtDataVencimento = dialogView.findViewById(R.id.edtDataVencimento);
+        EditText edtParcelas = dialogView.findViewById(R.id.edtParcelas);
         EditText edtValor = dialogView.findViewById(R.id.edtValorMovimentacao);
         EditText edtObs = dialogView.findViewById(R.id.edtObsMovimentacao);
+
         Button btnCancelar = dialogView.findViewById(R.id.btnCancelarDialogMovimentacao);
         Button btnSalvar = dialogView.findViewById(R.id.btnSalvarDialogMovimentacao);
 
-        String[] tiposUi = {"Entrada", "Saída"};
-        String[] categorias = {"Salário", "Depósitos", "Moradia", "Mercado", "Transporte", "Entretenimento", "Saúde", "Contas", "Outros"};
+        String[] categoriasReceita = {"Salário", "Depósito", "Poupança"};
+        String[] categoriasDespesa = {"Moradia", "Mercado", "Transporte", "Entretenimento", "Saúde", "Contas", "Outros"};
         String[] meiosUi = {"Dinheiro", "Pix", "Débito", "Crédito", "Boleto", "Outro"};
 
-        ArrayAdapter<String> adapterTipo = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, tiposUi);
-        adapterTipo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerTipo.setAdapter(adapterTipo);
+        // Configuração inteligente de categorias e visibilidade baseada no botão clicado
+        String tipoBanco = (registroEdicao != null) ? registroEdicao.tipo : tipoInicial;
+        boolean isEntrada = "entrada".equals(tipoBanco);
 
-        ArrayAdapter<String> adapterCategoria = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, categorias);
-        adapterCategoria.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategoria.setAdapter(adapterCategoria);
+        String[] categorias = isEntrada ? categoriasReceita : categoriasDespesa;
+        ArrayAdapter<String> adapterCat = new ArrayAdapter<>(requireContext(), R.layout.spinner_item_claro, categorias);
+        adapterCat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategoria.setAdapter(adapterCat);
 
-        ArrayAdapter<String> adapterMeio = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, meiosUi);
+        layoutMeioPagamento.setVisibility(isEntrada ? View.GONE : View.VISIBLE);
+
+        ArrayAdapter<String> adapterMeio = new ArrayAdapter<>(requireContext(), R.layout.spinner_item_claro, meiosUi);
         adapterMeio.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMeio.setAdapter(adapterMeio);
+
+        spinnerMeio.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selecionado = parent.getItemAtPosition(position).toString();
+                layoutCartaoCredito.setVisibility("Crédito".equals(selecionado) ? View.VISIBLE : View.GONE);
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         AlertDialog dialog = new AlertDialog.Builder(requireContext()).setView(dialogView).create();
         if (dialog.getWindow() != null) {
@@ -489,71 +508,113 @@ public class TransacoesFragment extends Fragment {
         }
 
         boolean modoEdicao = registroEdicao != null;
-
-        txtTitulo.setText(modoEdicao
-                ? "Editar movimentação"
-                : ("entrada".equals(tipoInicial) ? "Nova receita" : "Nova despesa"));
+        txtTitulo.setText(modoEdicao ? "Editar movimentação" : (isEntrada ? "Nova receita" : "Nova despesa"));
 
         if (modoEdicao) {
-            selecionarSpinner(spinnerTipo, "entrada".equals(registroEdicao.tipo) ? "Entrada" : "Saída");
             selecionarSpinner(spinnerCategoria, registroEdicao.categoria);
             selecionarSpinner(spinnerMeio, capitalizarMeioUi(registroEdicao.meio));
             edtData.setText(registroEdicao.data);
-            edtValor.setText(String.valueOf((int) registroEdicao.valor));
+            edtValor.setText(String.format(Locale.US, "%.2f", registroEdicao.valor));
             edtObs.setText(registroEdicao.observacao);
         } else {
-            selecionarSpinner(spinnerTipo, "entrada".equals(tipoInicial) ? "Entrada" : "Saída");
             edtData.setText(formatarDataCurta(new Date()));
         }
 
         btnCancelar.setOnClickListener(v -> dialog.dismiss());
 
         btnSalvar.setOnClickListener(v -> {
-            String tipoUi = spinnerTipo.getSelectedItem().toString();
             String categoria = spinnerCategoria.getSelectedItem().toString();
-            String meioUi = spinnerMeio.getSelectedItem().toString();
+            String meioUi = (!isEntrada && layoutMeioPagamento.getVisibility() == View.VISIBLE) ? spinnerMeio.getSelectedItem().toString() : "Outro";
             String dataTexto = edtData.getText().toString().trim();
             String valorTexto = edtValor.getText().toString().trim();
-            String obs = edtObs.getText().toString().trim();
+            String obs = edtObs.getText().toString().trim(); // Agora é opcional
 
-            if (TextUtils.isEmpty(dataTexto) || TextUtils.isEmpty(valorTexto) || TextUtils.isEmpty(obs)) {
-                Toast.makeText(requireContext(), "Preencha todos os campos.", Toast.LENGTH_SHORT).show();
+            if (TextUtils.isEmpty(dataTexto) || TextUtils.isEmpty(valorTexto)) {
+                Toast.makeText(requireContext(), "Preencha a data e o valor.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            Date dataConvertida = converterTextoParaData(dataTexto);
-            if (dataConvertida == null) {
-                Toast.makeText(requireContext(), "Data inválida. Use o formato dd/MM.", Toast.LENGTH_SHORT).show();
+            Date dataTransacao = converterTextoParaData(dataTexto);
+            if (dataTransacao == null) {
+                Toast.makeText(requireContext(), "Data inválida. Use dd/MM.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            double valor = Double.parseDouble(valorTexto);
-            String tipoBanco = "Entrada".equalsIgnoreCase(tipoUi) ? "entrada" : "saida";
+            double valorTotal = Double.parseDouble(valorTexto);
             String meioBanco = mapearMeioUiParaBanco(meioUi);
-            String monthKey = formatarMonthKey(dataConvertida);
+
+            int parcelas = 1;
+            Date dataVencimentoFatura = null;
+            if (layoutCartaoCredito.getVisibility() == View.VISIBLE) {
+                String pStr = edtParcelas.getText().toString().trim();
+                if (!pStr.isEmpty()) parcelas = Math.max(1, Integer.parseInt(pStr));
+
+                String vencTexto = edtDataVencimento.getText().toString().trim();
+                if (!TextUtils.isEmpty(vencTexto)) {
+                    dataVencimentoFatura = converterTextoParaData(vencTexto);
+                }
+            }
 
             if (modoEdicao) {
-                atualizarMovimentacaoNoFirebase(registroEdicao.id, tipoBanco, categoria, meioBanco, dataConvertida, monthKey, valor, obs, dialog);
+                String monthKey = formatarMonthKey(dataTransacao);
+                atualizarMovimentacaoNoFirebase(registroEdicao.id, tipoBanco, categoria, meioBanco, dataTransacao, monthKey, valorTotal, obs, dialog);
             } else {
-                criarMovimentacaoNoFirebase(tipoBanco, categoria, meioBanco, dataConvertida, monthKey, valor, obs, dialog);
+                if (parcelas > 1) {
+                    criarMovimentacaoParceladaNoFirebase(tipoBanco, categoria, meioBanco, dataTransacao, dataVencimentoFatura, valorTotal, parcelas, obs, dialog);
+                } else {
+                    String monthKey = formatarMonthKey(dataTransacao);
+                    criarMovimentacaoNoFirebase(tipoBanco, categoria, meioBanco, dataTransacao, monthKey, valorTotal, obs, dialog);
+                }
             }
         });
 
         dialog.show();
     }
 
-    private void criarMovimentacaoNoFirebase(String tipo,
-                                             String categoria,
-                                             String meio,
-                                             Date data,
-                                             String monthKey,
-                                             double valor,
-                                             String obs,
-                                             AlertDialog dialog) {
-
+    private void criarMovimentacaoParceladaNoFirebase(String tipo, String categoria, String meio, Date dataEmissao, Date dataVencimentoPrimeira, double valorTotal, int parcelas, String obs, AlertDialog dialog) {
         FirebaseUser usuarioAtual = auth.getCurrentUser();
         if (usuarioAtual == null) return;
+        String uid = usuarioAtual.getUid();
 
+        WriteBatch batch = db.batch();
+        double valorParcela = valorTotal / parcelas;
+
+        Date dataBase = (dataVencimentoPrimeira != null) ? dataVencimentoPrimeira : dataEmissao;
+
+        for (int i = 1; i <= parcelas; i++) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(dataBase);
+            cal.add(Calendar.MONTH, i - 1);
+            Date dataParcela = cal.getTime();
+            String monthKey = formatarMonthKey(dataParcela);
+            String obsParcela = obs + (obs.isEmpty() ? "" : " ") + "(" + i + "/" + parcelas + ")";
+
+            Map<String, Object> transacao = new LinkedHashMap<>();
+            transacao.put("uid", uid);
+            transacao.put("tipo", tipo);
+            transacao.put("categoria", categoria);
+            transacao.put("meio", meio);
+            transacao.put("date", new Timestamp(dataParcela));
+            transacao.put("monthKey", monthKey);
+            transacao.put("valor", valorParcela);
+            transacao.put("obs", obsParcela);
+            transacao.put("deletedAt", null);
+            transacao.put("createdAt", FieldValue.serverTimestamp());
+            transacao.put("updatedAt", FieldValue.serverTimestamp());
+
+            batch.set(db.collection("users").document(uid).collection("transactions").document(), transacao);
+        }
+
+        batch.commit().addOnSuccessListener(unused -> {
+            dialog.dismiss();
+            Toast.makeText(requireContext(), "Compra parcelada registrada.", Toast.LENGTH_SHORT).show();
+            carregarTransacoesDoFirebase();
+        }).addOnFailureListener(e -> Toast.makeText(requireContext(), "Erro: " + e.getMessage(), Toast.LENGTH_LONG).show());
+    }
+
+    private void criarMovimentacaoNoFirebase(String tipo, String categoria, String meio, Date data, String monthKey, double valor, String obs, AlertDialog dialog) {
+        FirebaseUser usuarioAtual = auth.getCurrentUser();
+        if (usuarioAtual == null) return;
         String uid = usuarioAtual.getUid();
 
         Map<String, Object> novaMovimentacao = new LinkedHashMap<>();
@@ -569,35 +630,17 @@ public class TransacoesFragment extends Fragment {
         novaMovimentacao.put("createdAt", FieldValue.serverTimestamp());
         novaMovimentacao.put("updatedAt", FieldValue.serverTimestamp());
 
-        db.collection("users")
-                .document(uid)
-                .collection("transactions")
-                .add(novaMovimentacao)
+        db.collection("users").document(uid).collection("transactions").add(novaMovimentacao)
                 .addOnSuccessListener(documentReference -> {
                     dialog.dismiss();
-                    Toast.makeText(requireContext(), "Movimentação criada com sucesso.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Criado com sucesso.", Toast.LENGTH_SHORT).show();
                     carregarTransacoesDoFirebase();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(requireContext(),
-                                "Erro ao criar movimentação: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show()
-                );
+                });
     }
 
-    private void atualizarMovimentacaoNoFirebase(String id,
-                                                 String tipo,
-                                                 String categoria,
-                                                 String meio,
-                                                 Date data,
-                                                 String monthKey,
-                                                 double valor,
-                                                 String obs,
-                                                 AlertDialog dialog) {
-
+    private void atualizarMovimentacaoNoFirebase(String id, String tipo, String categoria, String meio, Date data, String monthKey, double valor, String obs, AlertDialog dialog) {
         FirebaseUser usuarioAtual = auth.getCurrentUser();
         if (usuarioAtual == null) return;
-
         String uid = usuarioAtual.getUid();
 
         Map<String, Object> atualizacao = new LinkedHashMap<>();
@@ -610,21 +653,12 @@ public class TransacoesFragment extends Fragment {
         atualizacao.put("obs", obs);
         atualizacao.put("updatedAt", FieldValue.serverTimestamp());
 
-        db.collection("users")
-                .document(uid)
-                .collection("transactions")
-                .document(id)
-                .update(atualizacao)
+        db.collection("users").document(uid).collection("transactions").document(id).update(atualizacao)
                 .addOnSuccessListener(unused -> {
                     dialog.dismiss();
-                    Toast.makeText(requireContext(), "Movimentação atualizada com sucesso.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Atualizado com sucesso.", Toast.LENGTH_SHORT).show();
                     carregarTransacoesDoFirebase();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(requireContext(),
-                                "Erro ao editar movimentação: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show()
-                );
+                });
     }
 
     private void abrirConfirmacaoEdicao(RegistroFinanceiro registro) {
@@ -639,7 +673,7 @@ public class TransacoesFragment extends Fragment {
     private void abrirConfirmacaoExclusao(RegistroFinanceiro registro) {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Confirmar exclusão")
-                .setMessage("Deseja realmente enviar esta movimentação para a lixeira?")
+                .setMessage("Deseja enviar para a lixeira?")
                 .setNegativeButton("Cancelar", null)
                 .setPositiveButton("Excluir", (dialog, which) -> enviarParaLixeira(registro))
                 .show();
@@ -648,26 +682,11 @@ public class TransacoesFragment extends Fragment {
     private void enviarParaLixeira(RegistroFinanceiro registro) {
         FirebaseUser usuarioAtual = auth.getCurrentUser();
         if (usuarioAtual == null) return;
-
         String uid = usuarioAtual.getUid();
 
-        db.collection("users")
-                .document(uid)
-                .collection("transactions")
-                .document(registro.id)
-                .update(
-                        "deletedAt", FieldValue.serverTimestamp(),
-                        "updatedAt", FieldValue.serverTimestamp()
-                )
-                .addOnSuccessListener(unused -> {
-                    Toast.makeText(requireContext(), "Movimentação enviada para a lixeira.", Toast.LENGTH_SHORT).show();
-                    carregarTransacoesDoFirebase();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(requireContext(),
-                                "Erro ao excluir movimentação: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show()
-                );
+        db.collection("users").document(uid).collection("transactions").document(registro.id)
+                .update("deletedAt", FieldValue.serverTimestamp(), "updatedAt", FieldValue.serverTimestamp())
+                .addOnSuccessListener(unused -> carregarTransacoesDoFirebase());
     }
 
     private void abrirDialogFiltro() {
@@ -681,31 +700,20 @@ public class TransacoesFragment extends Fragment {
 
         String[] tiposUi = {"Todos", "Entrada", "Saída"};
         String[] meiosUi = {"Todos", "Dinheiro", "Pix", "Débito", "Crédito", "Boleto", "Outro"};
-        String[] categorias = {"Todas", "Salário", "Depósitos", "Moradia", "Mercado", "Transporte", "Entretenimento", "Saúde", "Contas", "Outros"};
+        String[] categorias = {"Todas", "Salário", "Depósito", "Poupança", "Moradia", "Mercado", "Transporte", "Entretenimento", "Saúde", "Contas", "Outros"};
 
-        ArrayAdapter<String> adapterTipo = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, tiposUi);
-        adapterTipo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerTipo.setAdapter(adapterTipo);
-
-        ArrayAdapter<String> adapterMeio = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, meiosUi);
-        adapterMeio.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMeio.setAdapter(adapterMeio);
-
-        ArrayAdapter<String> adapterCategoria = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, categorias);
-        adapterCategoria.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategoria.setAdapter(adapterCategoria);
+        spinnerTipo.setAdapter(new ArrayAdapter<>(requireContext(), R.layout.spinner_item_claro, tiposUi));
+        spinnerMeio.setAdapter(new ArrayAdapter<>(requireContext(), R.layout.spinner_item_claro, meiosUi));
+        spinnerCategoria.setAdapter(new ArrayAdapter<>(requireContext(), R.layout.spinner_item_claro, categorias));
 
         selecionarSpinner(spinnerTipo, filtroTipoAtivo);
         selecionarSpinner(spinnerMeio, filtroMeioAtivo);
         selecionarSpinner(spinnerCategoria, filtroCategoriaAtiva);
 
         AlertDialog dialog = new AlertDialog.Builder(requireContext()).setView(dialogView).create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
+        if (dialog.getWindow() != null) dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         btnFechar.setOnClickListener(v -> dialog.dismiss());
-
         btnAplicar.setOnClickListener(v -> {
             filtroTipoAtivo = spinnerTipo.getSelectedItem().toString();
             filtroMeioAtivo = spinnerMeio.getSelectedItem().toString();
@@ -713,13 +721,11 @@ public class TransacoesFragment extends Fragment {
             aplicarFiltrosEBusca();
             dialog.dismiss();
         });
-
         dialog.show();
     }
 
     private void abrirDialogBusca() {
         View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_busca, null);
-
         EditText edtBuscaTexto = dialogView.findViewById(R.id.edtBuscaTexto);
         EditText edtBuscaValor = dialogView.findViewById(R.id.edtBuscaValor);
         Button btnFechar = dialogView.findViewById(R.id.btnFecharDialogBusca);
@@ -729,37 +735,28 @@ public class TransacoesFragment extends Fragment {
         edtBuscaValor.setText(buscaValorAtivo);
 
         AlertDialog dialog = new AlertDialog.Builder(requireContext()).setView(dialogView).create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
+        if (dialog.getWindow() != null) dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         btnFechar.setOnClickListener(v -> dialog.dismiss());
-
         btnAplicar.setOnClickListener(v -> {
             buscaTextoAtiva = edtBuscaTexto.getText().toString().trim();
             buscaValorAtivo = edtBuscaValor.getText().toString().trim();
             aplicarFiltrosEBusca();
             dialog.dismiss();
         });
-
         dialog.show();
     }
 
     private void abrirDialogLixeira() {
         View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_lixeira, null);
-
         LinearLayout containerLixeiraDialog = dialogView.findViewById(R.id.containerLixeiraDialog);
         Button btnFechar = dialogView.findViewById(R.id.btnFecharDialogLixeira);
 
         AlertDialog dialog = new AlertDialog.Builder(requireContext()).setView(dialogView).create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
+        if (dialog.getWindow() != null) dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         renderizarLixeira(containerLixeiraDialog, dialog);
-
         btnFechar.setOnClickListener(v -> dialog.dismiss());
-
         dialog.show();
     }
 
@@ -793,51 +790,27 @@ public class TransacoesFragment extends Fragment {
 
             btnEditar.setText("Recuperar");
             btnExcluir.setVisibility(View.GONE);
-
-            btnEditar.setOnClickListener(v -> abrirConfirmacaoRecuperacao(registro, dialogPai));
+            btnEditar.setOnClickListener(v -> recuperarDaLixeira(registro, dialogPai));
 
             containerLixeiraDialog.addView(item);
         }
     }
 
-    private void abrirConfirmacaoRecuperacao(RegistroFinanceiro registro, AlertDialog dialogPai) {
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Recuperar movimentação")
-                .setMessage("Deseja recuperar esta movimentação da lixeira?")
-                .setNegativeButton("Cancelar", null)
-                .setPositiveButton("Recuperar", (dialog, which) -> recuperarDaLixeira(registro, dialogPai))
-                .show();
-    }
-
     private void recuperarDaLixeira(RegistroFinanceiro registro, AlertDialog dialogPai) {
         FirebaseUser usuarioAtual = auth.getCurrentUser();
         if (usuarioAtual == null) return;
-
         String uid = usuarioAtual.getUid();
 
-        db.collection("users")
-                .document(uid)
-                .collection("transactions")
-                .document(registro.id)
-                .update(
-                        "deletedAt", null,
-                        "updatedAt", FieldValue.serverTimestamp()
-                )
+        db.collection("users").document(uid).collection("transactions").document(registro.id)
+                .update("deletedAt", null, "updatedAt", FieldValue.serverTimestamp())
                 .addOnSuccessListener(unused -> {
                     dialogPai.dismiss();
-                    Toast.makeText(requireContext(), "Movimentação recuperada com sucesso.", Toast.LENGTH_SHORT).show();
                     carregarTransacoesDoFirebase();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(requireContext(),
-                                "Erro ao recuperar movimentação: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show()
-                );
+                });
     }
 
     private void atualizarChipBusca() {
         List<String> partes = new ArrayList<>();
-
         if (!filtroTipoAtivo.equals("Todos")) partes.add("Tipo: " + filtroTipoAtivo);
         if (!filtroMeioAtivo.equals("Todos")) partes.add("Meio: " + filtroMeioAtivo);
         if (!filtroCategoriaAtiva.equals("Todas")) partes.add("Categoria: " + filtroCategoriaAtiva);
@@ -856,30 +829,21 @@ public class TransacoesFragment extends Fragment {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < partes.size(); i++) {
             sb.append(partes.get(i));
-            if (i < partes.size() - 1) {
-                sb.append(" • ");
-            }
+            if (i < partes.size() - 1) sb.append(" • ");
         }
         return sb.toString();
     }
 
     private void limparBuscaEFiltro() {
-        filtroTipoAtivo = "Todos";
-        filtroMeioAtivo = "Todos";
-        filtroCategoriaAtiva = "Todas";
-        buscaTextoAtiva = "";
-        buscaValorAtivo = "";
-
+        filtroTipoAtivo = "Todos"; filtroMeioAtivo = "Todos"; filtroCategoriaAtiva = "Todas";
+        buscaTextoAtiva = ""; buscaValorAtivo = "";
         aplicarFiltrosEBusca();
-        Toast.makeText(requireContext(), "Busca e filtros limpos.", Toast.LENGTH_SHORT).show();
     }
 
     private void selecionarSpinner(Spinner spinner, String valor) {
         if (valor == null) return;
-
         for (int i = 0; i < spinner.getCount(); i++) {
-            String item = spinner.getItemAtPosition(i).toString();
-            if (item.equalsIgnoreCase(valor)) {
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(valor)) {
                 spinner.setSelection(i);
                 return;
             }
@@ -894,20 +858,12 @@ public class TransacoesFragment extends Fragment {
 
     private String mapearMeioUiParaBanco(String meioUi) {
         switch (meioUi.toLowerCase()) {
-            case "dinheiro":
-                return "dinheiro";
-            case "pix":
-                return "pix";
-            case "débito":
-            case "debito":
-                return "debito";
-            case "crédito":
-            case "credito":
-                return "credito";
-            case "boleto":
-                return "boleto";
-            default:
-                return "outro";
+            case "dinheiro": return "dinheiro";
+            case "pix": return "pix";
+            case "débito": case "debito": return "debito";
+            case "crédito": case "credito": return "credito";
+            case "boleto": return "boleto";
+            default: return "outro";
         }
     }
 
@@ -919,41 +875,27 @@ public class TransacoesFragment extends Fragment {
 
     private String capitalizarMeioUi(String meioBanco) {
         switch (meioBanco) {
-            case "dinheiro":
-                return "Dinheiro";
-            case "pix":
-                return "Pix";
-            case "debito":
-                return "Débito";
-            case "credito":
-                return "Crédito";
-            case "boleto":
-                return "Boleto";
-            default:
-                return "Outro";
+            case "dinheiro": return "Dinheiro";
+            case "pix": return "Pix";
+            case "debito": return "Débito";
+            case "credito": return "Crédito";
+            case "boleto": return "Boleto";
+            default: return "Outro";
         }
     }
 
     private String obterIconeCategoria(String categoria) {
         switch (categoria) {
-            case "Salário":
-                return "💰";
-            case "Depósitos":
-                return "🏦";
-            case "Moradia":
-                return "🏠";
-            case "Mercado":
-                return "🛒";
-            case "Transporte":
-                return "🚗";
-            case "Entretenimento":
-                return "🍿";
-            case "Saúde":
-                return "💊";
-            case "Contas":
-                return "🧾";
-            default:
-                return "🪙";
+            case "Salário": return "💰";
+            case "Depósito": return "🏦";
+            case "Poupança": return "🐷";
+            case "Moradia": return "🏠";
+            case "Mercado": return "🛒";
+            case "Transporte": return "🚗";
+            case "Entretenimento": return "🍿";
+            case "Saúde": return "💊";
+            case "Contas": return "🧾";
+            default: return "🪙";
         }
     }
 
@@ -968,59 +910,38 @@ public class TransacoesFragment extends Fragment {
 
     private String formatarData(Timestamp timestamp) {
         if (timestamp == null) return "--/--";
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM", new Locale("pt", "BR"));
-        return sdf.format(timestamp.toDate());
+        return new SimpleDateFormat("dd/MM", new Locale("pt", "BR")).format(timestamp.toDate());
     }
 
     private String formatarDataCurta(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM", new Locale("pt", "BR"));
-        return sdf.format(date);
+        return new SimpleDateFormat("dd/MM", new Locale("pt", "BR")).format(date);
     }
 
     private String formatarMonthKey(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM", Locale.getDefault());
-        return sdf.format(date);
+        return new SimpleDateFormat("yyyy-MM", Locale.getDefault()).format(date);
     }
 
     private Date converterTextoParaData(String texto) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("pt", "BR"));
-            Calendar cal = Calendar.getInstance();
-            int anoAtualSelecionado = calendarioAtual.get(Calendar.YEAR);
-            return sdf.parse(texto + "/" + anoAtualSelecionado);
-        } catch (Exception e) {
-            return null;
-        }
+            if (texto.length() <= 5) return sdf.parse(texto + "/" + calendarioAtual.get(Calendar.YEAR));
+            return sdf.parse(texto);
+        } catch (Exception e) { return null; }
     }
 
     private String valorOuPadrao(String valor, String padrao) {
-        if (valor == null || valor.trim().isEmpty()) return padrao;
-        return valor;
+        return (valor == null || valor.trim().isEmpty()) ? padrao : valor;
     }
 
     private static class RegistroFinanceiro {
-        String id;
-        String tipo;
-        String categoria;
-        String meio;
-        String data;
-        String observacao;
-        String icone;
+        String id, tipo, categoria, meio, data, observacao, icone;
         double valor;
         boolean editado;
-        Timestamp dateTimestamp;
-        Timestamp deletedAt;
+        Timestamp dateTimestamp, deletedAt;
 
         RegistroFinanceiro(String id, String tipo, String categoria, String meio, String data, String observacao, double valor, String icone) {
-            this.id = id;
-            this.tipo = tipo;
-            this.categoria = categoria;
-            this.meio = meio;
-            this.data = data;
-            this.observacao = observacao;
-            this.valor = valor;
-            this.icone = icone;
-            this.editado = false;
+            this.id = id; this.tipo = tipo; this.categoria = categoria; this.meio = meio; this.data = data;
+            this.observacao = observacao; this.valor = valor; this.icone = icone; this.editado = false;
         }
     }
 }

@@ -21,21 +21,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="Tipo"
-            android:textColor="@color/moneva_text_primary"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/spinnerTipoMovimentacao"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_login_input" />
-
-        <TextView
+            android:id="@+id/labelCategoria"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
@@ -50,26 +36,34 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/bg_login_input" />
 
+        <!-- MEIO DE PAGAMENTO (Visível apenas para Despesa) -->
+        <LinearLayout
+            android:id="@+id/layoutMeioPagamento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Meio de Pagamento"
+                android:textColor="@color/moneva_text_primary"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinnerMeioMovimentacao"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_login_input" />
+        </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            android:text="Meio"
-            android:textColor="@color/moneva_text_primary"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/spinnerMeioMovimentacao"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_login_input" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="Data"
+            android:text="Data da Transação"
             android:textColor="@color/moneva_text_primary"
             android:textStyle="bold" />
 
@@ -85,11 +79,61 @@
             android:textColor="@color/moneva_text_primary"
             android:textColorHint="@color/moneva_text_secondary" />
 
+        <!-- CAMPOS ESPECÍFICOS PARA CARTÃO DE CRÉDITO -->
+        <LinearLayout
+            android:id="@+id/layoutCartaoCredito"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Data de Vencimento da Fatura"
+                android:textColor="@color/moneva_text_primary"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtDataVencimento"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_login_input"
+                android:hint="Ex.: 05/12"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textColor="@color/moneva_text_primary"
+                android:textColorHint="@color/moneva_text_secondary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Número de Parcelas"
+                android:textColor="@color/moneva_text_primary"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtParcelas"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_login_input"
+                android:hint="Ex.: 1 ou 12"
+                android:inputType="number"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textColor="@color/moneva_text_primary"
+                android:textColorHint="@color/moneva_text_secondary" />
+        </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            android:text="Valor"
+            android:text="Valor Total"
             android:textColor="@color/moneva_text_primary"
             android:textStyle="bold" />
 
@@ -99,9 +143,9 @@
             android:layout_height="52dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/bg_login_input"
-            android:digits="0123456789"
+            android:digits="0123456789."
             android:hint="Digite o valor"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:textColor="@color/moneva_text_primary"
@@ -111,7 +155,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            android:text="Observação"
+            android:text="Observação (Opcional)"
             android:textColor="@color/moneva_text_primary"
             android:textStyle="bold" />
 
