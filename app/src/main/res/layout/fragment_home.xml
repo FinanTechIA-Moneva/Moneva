@@ -93,19 +93,21 @@
 
                     <ProgressBar
                         style="?android:attr/progressBarStyleHorizontal"
+                        android:id="@+id/progressMetasHome"
                         android:layout_width="match_parent"
                         android:layout_height="10dp"
                         android:layout_marginTop="14dp"
                         android:max="100"
-                        android:progress="70"
+                        android:progress="0"
                         android:progressBackgroundTint="@color/moneva_progress_bg"
                         android:progressTint="@color/moneva_green_dark" />
 
                     <TextView
+                        android:id="@+id/txtMetaMensalHome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="70% da meta mensal concluída"
+                        android:text="Carregando metas..."
                         android:textColor="@color/moneva_text_secondary"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -131,7 +133,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="27 / 200 desbloqueadas"
+                        android:text="🚧 Em construção! 🚧"
                         android:textColor="@color/moneva_text_primary"
                         android:textSize="18sp" />
                 </LinearLayout>
@@ -147,29 +149,55 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📈 Nível Atual 2"
+                        android:text="📈 Nível Atual"
                         android:textColor="@color/moneva_green"
                         android:textSize="22sp"
                         android:textStyle="bold" />
 
                     <ProgressBar
                         style="?android:attr/progressBarStyleHorizontal"
+                        android:id="@+id/progressNivelHome"
                         android:layout_width="match_parent"
                         android:layout_height="10dp"
                         android:layout_marginTop="14dp"
                         android:max="100"
-                        android:progress="62"
+                        android:progress="0"
                         android:progressBackgroundTint="@color/moneva_progress_bg"
                         android:progressTint="@color/moneva_green_dark" />
 
                     <TextView
+                        android:id="@+id/txtNivelStatusHome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="62% para o próximo nível"
+                        android:text="Analise suas finanças para evoluir"
                         android:textColor="@color/moneva_text_secondary"
                         android:textSize="13sp" />
                 </LinearLayout>
+            </LinearLayout>
+
+            <!-- NOVO: GRÁFICO DE RENDIMENTO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_home_card"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📊 Análise de Rendimento"
+                    android:textColor="@color/moneva_green"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChartHome"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:layout_marginTop="16dp" />
             </LinearLayout>
 
             <TextView
@@ -215,7 +243,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Receitas"
+                        android:text="Receitas (Mês)"
                         android:textColor="@color/moneva_text_secondary"
                         android:textSize="14sp" />
 
@@ -232,7 +260,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="Despesas"
+                        android:text="Despesas (Mês)"
                         android:textColor="@color/moneva_text_secondary"
                         android:textSize="14sp" />
 
@@ -240,7 +268,7 @@
                         android:id="@+id/txtDespesasHome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Aguardando transações"
+                        android:text="R$ 0,00"
                         android:textColor="@color/moneva_text_primary"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -257,7 +285,7 @@
                         android:id="@+id/txtSaldoHome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Aguardando transações"
+                        android:text="R$ 0,00"
                         android:textColor="@color/moneva_green"
                         android:textSize="22sp"
                         android:textStyle="bold" />

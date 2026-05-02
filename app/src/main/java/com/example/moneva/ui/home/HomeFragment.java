@@ -130,7 +130,7 @@ public class HomeFragment extends Fragment {
         txtDespesasHome.setText("R$ 0,00");
         txtSaldoHome.setText(formatarMoeda(rendaMensal));
         txtResumoDashboardHome.setText("Resumo rápido com base no seu perfil");
-        txtConquistasHome.setText("27 / 200 desbloqueadas");
+        txtConquistasHome.setText("🚧🔨Em construção🚧🔨");
     }
 
     private String obterPrimeiroNome(String nomeCompleto) {
