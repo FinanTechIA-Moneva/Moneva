@@ -1,77 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/moneva_bg">
+    android:background="@color/moneva_bg"
+    android:orientation="vertical">
 
-    <!-- CONTEÚDO PRINCIPAL -->
+    <!-- 1. TOPO FIXO -->
     <LinearLayout
+        android:id="@+id/topbarTrilha"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_trilha_topbar"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:elevation="4dp">
 
-        <!-- TOPO (Adicionado padding e elevação para destaque) -->
-        <LinearLayout
-            android:id="@+id/topbarTrilha"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/txtTituloTrilha"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_trilha_topbar"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="16dp"
-            android:elevation="4dp">
-
-            <TextView
-                android:id="@+id/txtTituloTrilha"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="📖 Moneva"
-                android:textColor="@color/moneva_text_primary"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txtMoedasTrilha"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="18dp"
-                android:text="🪙 27"
-                android:textColor="@color/moneva_text_primary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txtSequenciaTrilha"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🔥 3 dias"
-                android:textColor="@color/moneva_text_primary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- ÁREA DA TRILHA (ZIGZAG) -->
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
             android:layout_weight="1"
-            android:overScrollMode="never"
-            android:fillViewport="true">
+            android:text="📖 Moneva"
+            android:textColor="@color/moneva_text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtMoedasTrilha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="18dp"
+            android:text="🪙 0"
+            android:textColor="@color/moneva_text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtSequenciaTrilha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔥 1 dia"
+            android:textColor="@color/moneva_text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- 2. CONTEÚDO ROLÁVEL (TRILHA EM LINHA RETA) -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:overScrollMode="never">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="30dp"
-            android:paddingBottom="150dp">
+            android:paddingTop="40dp"
+            android:paddingBottom="100dp">
 
-            <!-- NÓ 1 - CENTRAL -->
+            <!-- NÓ 1: INTRODUÇÃO -->
             <LinearLayout
+                android:id="@+id/nodeFase1"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/bg_trilha_node_bonus"
+                android:clickable="true"
+                android:focusable="true"
                 android:gravity="center">
                 <TextView
                     android:layout_width="wrap_content"
@@ -82,20 +80,16 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Linha Central -->
-            <View
-                android:layout_width="14dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/bg_trilha_path_segment" />
-
-            <!-- NÓ 2 - DESLOCADO PARA A ESQUERDA -->
+            <!-- NÓ 2: ECONOMIA BÁSICA -->
             <LinearLayout
+                android:id="@+id/nodeFase2"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
+                android:layout_marginTop="50dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginEnd="100dp"
                 android:background="@drawable/bg_trilha_node_locked"
+                android:clickable="true"
+                android:focusable="true"
                 android:gravity="center">
                 <TextView
                     android:layout_width="wrap_content"
@@ -104,21 +98,13 @@
                     android:textSize="34sp" />
             </LinearLayout>
 
-            <!-- Linha Alinhada à Esquerda -->
-            <View
-                android:layout_width="14dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginEnd="100dp"
-                android:background="@drawable/bg_trilha_path_segment" />
-
-            <!-- NÓ 3 (BÔNUS) - DESLOCADO PARA A DIREITA -->
+            <!-- NÓ 3: BÔNUS -->
             <LinearLayout
                 android:id="@+id/nodeBonusTrilha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginStart="100dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -126,6 +112,8 @@
                     android:layout_width="110dp"
                     android:layout_height="110dp"
                     android:background="@drawable/bg_trilha_node_bonus"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center">
                     <TextView
                         android:layout_width="wrap_content"
@@ -134,34 +122,18 @@
                         android:textSize="48sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/bg_trilha_badge"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="6dp"
-                    android:text="Bônus"
-                    android:textColor="@color/moneva_text_primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Linha Alinhada à Direita (Aumentada para evitar sobreposição do selo) -->
-            <View
-                android:layout_width="14dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="100dp"
-                android:background="@drawable/bg_trilha_path_segment" />
-
-            <!-- NÓ 4 - DESLOCADO PARA A ESQUERDA (ZIGZAG CONTINUA) -->
+            <!-- NÓ 4: INVESTIMENTOS -->
             <LinearLayout
+                android:id="@+id/nodeFase3"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
+                android:layout_marginTop="50dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginEnd="100dp"
                 android:background="@drawable/bg_trilha_node_locked"
+                android:clickable="true"
+                android:focusable="true"
                 android:gravity="center">
                 <TextView
                     android:layout_width="wrap_content"
@@ -170,17 +142,32 @@
                     android:textSize="34sp" />
             </LinearLayout>
 
+            <!-- NÓ 5: MESTRE DAS FINANÇAS -->
+            <LinearLayout
+                android:id="@+id/nodeFase4"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginTop="50dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_trilha_node_locked"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🏆"
+                    android:textSize="34sp" />
+            </LinearLayout>
+
         </LinearLayout>
+    </ScrollView>
 
-        </ScrollView>
-    </LinearLayout>
-
-    <!-- BARRA INFERIOR FIXA -->
+    <!-- 3. BARRA INFERIOR FIXA -->
     <LinearLayout
         android:id="@+id/layoutBottomNavTrilha"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
         android:background="@drawable/bg_bottom_nav_bar"
         android:gravity="center"
         android:orientation="horizontal"
@@ -288,4 +275,4 @@
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
-</FrameLayout>
+</LinearLayout>
